@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        {% for b in booking %}
+        <div style="border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin-bottom: 20px; background-color: #f9f9f9;">
+          <h3 style="color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+            Booking #{{ forloop.counter }}
+          </h3>
+          
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 8px 0; width: 120px; font-weight: bold;">Passenger:</td>
+              <td style="padding: 8px 0;">{{ b.passenger_name }}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold;">Route:</td>
+              <td style="padding: 8px 0;">{{ b.boarding }} → {{ b.deboarding }}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold;">Train:</td>
+              <td style="padding: 8px 0;">{{ b.train.name }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 0; font-weight: bold;">Date:</td>
+                <td style="padding: 8px 0;">{{ b.journey_date }}</td>
+              </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold;">Class:</td>
+              <td style="padding: 8px 0;">{{ b.travelling_class }}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold;">Status:</td>
+              <td style="padding: 8px 0;">
+                <span style="color: {% if b.status == 'booked' %}green{% else %}orange{% endif %};">
+                  {{ b.status }}
+                </span>
+              </td>
+            </tr>
+          </table>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: #666;">No bookings found.</p>
+        {% endfor %}
+      </div>
+    <p>
+        <form method="POST" action="{% url 'dashboard' %}">
+            {% csrf_token %}
+            <button type="submit">Return to Dasboard</button>
+        </form>
+    </p>
+</body>
+</html>

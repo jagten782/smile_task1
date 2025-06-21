@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+
+<p>
+    <form method="POST" action="{% url 'search_trains' %}">
+        {% csrf_token %}
+        <button type="submit">Search Trains</button>
+    </form>
+</p>
+<p>
+    <form method="POST" action="{% url 'bookings' %}">
+        {% csrf_token %}
+        <button type="submit">View your bookings</button>
+    </form> 
+</p>
+<p>
+    <form method="POST" action="{% url 'add_money' %}">
+        {% csrf_token %}
+        <button type="submit">Add money</button>
+    </form> 
+</p>
+<p>
+    <form method="POST" action="{% url 'cancel' %}">
+        {% csrf_token %}
+        <button type="submit">Cancel Ticket</button>
+    </form> 
+</p>
+<p>
+    Your current Wallet Balance is :{{ w.balance }}
+</p>
+{% if refund %}
+Selected Tickets have been cancelled.Refund amount of {{refund}} has been credited to your wallet.
+{% endif %}
+</body>
+</html>

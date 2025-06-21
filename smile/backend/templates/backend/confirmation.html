@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {{message}}
+    <p>Successfully Paid:{{cost}}</p>
+    <form method="POST" action="{% url 'dashboard' %}">
+        {% csrf_token %}
+        <button type="submit">Dashboard</button>
+    </form>
+</body>
+</html>

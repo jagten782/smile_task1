@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% for t in seats %}
+    <p>
+        {{t.name}}            Available seats:{{t.seats}}                  Fare:{{t.price}}
+        <form method="GET" action="{% url 'book_ticket' query=t.name %}" >
+         <button type="Submit">Book ticket</button>
+        </form>
+    </p>
+    {% endfor %}
+</body>
+</html>

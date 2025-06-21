@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add money in the Wallet</title>
+</head>
+<body>
+    <form method="POST" action="{% url 'add_money' %}">
+        {% csrf_token %}
+        <p>
+            <label for="money">Enter the amount to be added in the Wallet</label>
+        </p>
+        <p>
+            <input type="text" name="money" placeholder="Enter amount" id="money">
+        </p>
+        <p>
+            <button type="submit">Add money</button>
+        </p>
+    </form>
+</body>
+</html>

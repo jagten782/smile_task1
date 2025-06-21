@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <h3>Register here</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label for="username">Username</label>
+            <input type="text" placeholder="Enter the username" name="username">
+        </p>
+        <p>
+            <label for="password">Password</label>
+            <input type="password" placeholder="Enter the password" name="password">
+        </p>
+        <p>
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" placeholder="Re-Enter the password" name="confirm_password">
+        </p>
+        <button type="submit">Submit and Login</button>
+    </form>
+
+    {% if error %}
+    <div class="error-message">{{ error }}</div>
+    {% endif %}
+</body>
+</html>
