@@ -18,6 +18,7 @@
         <button type="submit">Submit and pay</button>
     </form>
     <form method="POST" action="{% url 'dashboard'  %}">
+        {% csrf_token %}
         <button type="submit">Back to Dashboard</button>
     </form>
 </body>

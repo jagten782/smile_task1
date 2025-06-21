@@ -44,7 +44,6 @@ def register(request):
         user=User.objects.create_user(username=username,password=pas)   
         user.save()     
         user.is_staff=True
-        wallet, created = Wallet.objects.get_or_create(user=request.user)
         return render(request,"backend/login.html",{"message":"Account successfully created !!"})
 
     else:
@@ -71,6 +70,7 @@ def search(request):
             trains1 = Train.objects.filter(
             Q(rout__st__station__code=dest.code),Q(rout__day__day_running__in=day_name))
             common_trains = trains.filter(id__in=trains1.values('id'))
+            print(common_trains)
             Search_results.objects.filter(user=request.user).delete()
             for t in common_trains:
                 r1=t.rout.filter(st__station__code=sor.code)
@@ -91,10 +91,9 @@ def search(request):
                             deboarding_stop=origin_stop.first().stop_order,
                             fare_diff=(origin_stop.first().fare_multiplier-dest_stop.first().fare_multiplier)*t.base_fare,
                             train_id=t.id,
-                            journey_date=date
-                        )   
-                        obj.save() 
-            train_info=Search_results.objects.all().distinct()          
+                            journey_date=date)    
+            train_info=Search_results.objects.filter(user=request.user).distinct() 
+            print(train_info)         
             return render(request,"backend/search_results.html",{'train':train_info})
     else:
         form = Searchform()
@@ -106,7 +105,7 @@ def select_class(request,t_id):
     if request.method == 'GET':
         print(f"\nt_id:{t_id}\n")
         train=Train.objects.get(id=t_id)
-        train_info=Search_results.objects.get(train_id=t_id)
+        train_info=Search_results.objects.get(train_id=t_id,user=request.user)
         Search_results.objects.filter(user=request.user).exclude(train_id=t_id).delete()
         Temp_seat.objects.filter(user=request.user).delete()
         for t in train.seats.all():
@@ -114,7 +113,7 @@ def select_class(request,t_id):
             booked_seats = (Booking.objects.filter(status='booked',train__id=t_id,deboarding_stop__gte=train_info.deboarding_stop,journey_date=train_info.journey_date)).count()
             obj=Temp_seat.objects.create(user=request.user,name=t.name,price=fare,seats=t.available_seats-booked_seats)
             obj.save()
-        seat_info=Temp_seat.objects.all().distinct()
+        seat_info=Temp_seat.objects.filter(user=request.user).distinct()
         print(seat_info)
         return render(request,"backend/select_class.html",{'seats':seat_info}) 
     else:
@@ -136,7 +135,7 @@ def book(request,num,query):
     if request.method=="POST":
         train_info=Search_results.objects.get(user=request.user)
         form=formset_factory(Bookingform,extra=num)
-        seat_info=Temp_seat.objects.get(name=query)
+        seat_info=Temp_seat.objects.get(name=query,user=request.user)
         formset = form(request.POST)
         train=Train.objects.get(id=train_info.train_id)
         cost=num*seat_info.price 
@@ -168,7 +167,7 @@ def book(request,num,query):
 
     else:
         wallet, created = Wallet.objects.get_or_create(user=request.user)
-        seat_info=Temp_seat.objects.get(name=query)
+        seat_info=Temp_seat.objects.get(name=query,user=request.user)
         cost=num*seat_info.price 
         train_info=Search_results.objects.get(user=request.user)
         form=formset_factory(Bookingform,extra=num)
